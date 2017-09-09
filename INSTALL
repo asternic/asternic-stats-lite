@@ -1,0 +1,77 @@
+INSTALLING
+----------
+
+1) Untar de file (you already done that)
+
+2) Change to the extracton directory asternic-stats
+
+#> cd asternic-stats
+
+3) Edit ./html/config.php to set your db user and pass,
+   the AMI credentials (as set in /etc/asterisk/manager.conf).
+   You can also select the language.
+
+4) Move /html to a suitable place on your web root
+
+#> mv html /var/www/html/qstatslite
+
+5) Create a new database named 'qstatslite' and related tables:
+
+#> mysql -u root -p < ./sql/qstats.sql
+
+6) Edit ./parselog/config.php to set the location and 
+   name of the queue_log file and your db user and pass
+
+7) Move the parselog directory to its final location:
+
+#> mv parselog /usr/local/parseloglite
+
+
+PARSING LOGS
+------------
+
+
+Inside /usr/local/parseloglite directory you will find a script to do
+the job named parselog.php. To test it, change to that directory and
+run it by hand:
+
+#> cd /usr/local/parseloglite
+#> ./parselog.php convertlocal
+
+If you dont have binftm_misc installed you might need
+to run 'php -q ./parselog.php'
+
+#> cd /usr/local/parseloglite
+#> php -q ./parselog.php convertlocal
+
+To parse the log at periodic intervals via a cronjob, you can write
+a script in /etc/cron.hourly named qstatslog with these commands :
+
+#> echo "#!/bin/bash" > /etc/cron.hourly
+#> echo "cd /usr/local/parseloglite" >> /etc/cron.hourly
+#> echo "./parselog.php convertlocal" >> /etc/cron.hourly
+
+Be sure to set execute permissions to it:
+
+#> chmod a+x /etc/cron.hourly/qstatslog
+
+* REALTIME parsing
+
+Realtime parsing is only available in the PRO version.
+
+MAINTENANCE
+-----------
+
+If you want to clear/purgue the tables, run parselog.php with
+the purge parameter:
+
+./parselog.php purgue
+
+Attention! It will remove all queue activity from the logs so you
+can start afresh.
+
+
+ACCESING STATS
+--------------
+
+Point your browser to the new url and that's it
