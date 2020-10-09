@@ -1,6 +1,6 @@
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -22,38 +22,27 @@
 require_once("config.php");
 include("sesvars.php");
 ?>
-<!-- http://www.house.com.ar/quirksmode -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Asternic Call Center Stats</title>
-	<style type="text/css" media="screen">@import "css/basic.css";</style>
-	<style type="text/css" media="screen">@import "css/tab.css";</style>
-	<style type="text/css" media="screen">@import "css/table.css";</style>
-	<style type="text/css" media="screen">@import "css/fixed-all.css";</style>
-	<script type="text/javascript" src="js/sorttable.js"></script>
-	<script type="text/javascript" src="js/Chart.min.js"></script>
-
-<!--[if gte IE 5.5000]>
-<style type='text/css'> img { behavior:url(pngbehavior.htc) } </style>
-<![endif]-->
-
-<!--[if IE]>
-<link 
- href="css/fixed-ie.css" 
- rel="stylesheet" 
- type="text/css" 
- media="screen"> 
-<script type="text/javascript"> 
-onload = function() { content.focus() } 
-</script> 
-<![endif]-->
-</head>
+<!doctype html>
+            
+<html lang="en">
+<head>      
+  <meta charset="utf-8">
+            
+  <title>Asternic Call Center Stats</title>
+  <meta name="description" content="Asternic Call Center Stats Lite Reports">
+  <meta name="author" content="asternic.net">
+            
+  <link rel="stylesheet" href="css/basic.css">
+  <link rel="stylesheet" href="css/tab.css">
+  <link rel="stylesheet" href="css/table.css">
+  <link rel="stylesheet" href="css/fixed-all.css">
+                
+  <script src="js/sorttable.js"></script>
+  <script src="js/Chart.min.js"></script>
+                
+</head>         
 <?php
 
-$graphcolor =  "&bgcolor=0xF0ffff&bgcolorchart=0xdfedf3&fade1=ff6600&fade2=ff6600&colorbase=0xfff3b3&reverse=1";
-$graphcolor2 = "&bgcolor=0xF0ffff&bgcolorchart=0xdfedf3&fade1=ff6600&colorbase=fff3b3&reverse=1&fade2=0x528252";
 
 // ABANDONED CALLS
 
@@ -72,49 +61,49 @@ if(db_num_rows($res)>0) {
 
 while($row=db_fetch_row($res)) {
 
-	if($row[3]=="ABANDON") {
- 		$abandoned++;
-		$abandon_end_pos+=$row[4];
-		$abandon_start_pos+=$row[5];
-		$total_hold_abandon+=$row[6];
-	}
-	if($row[3]=="EXITWITHTIMEOUT") {
- 		$timeout++;
-	}
-	$abandon_calls_queue["$row[1]"]++;
+    if($row[3]=="ABANDON") {
+         $abandoned++;
+        $abandon_end_pos+=$row[4];
+        $abandon_start_pos+=$row[5];
+        $total_hold_abandon+=$row[6];
+    }
+    if($row[3]=="EXITWITHTIMEOUT") {
+         $timeout++;
+    }
+    $abandon_calls_queue["$row[1]"]++;
 }
 
 if($abandoned > 0) {
-	$abandon_average_hold = $total_hold_abandon / $abandoned;
+    $abandon_average_hold = $total_hold_abandon / $abandoned;
 } else {
-	$abandon_average_hold = 0;
+    $abandon_average_hold = 0;
 }
 $abandon_average_hold = number_format($abandon_average_hold,0);
 
 if($abandoned > 0) {
-	$abandon_average_start = round($abandon_start_pos / $abandoned);
+    $abandon_average_start = round($abandon_start_pos / $abandoned);
 } else {
-	$abandon_average_start = 0;
+    $abandon_average_start = 0;
 }
 $abandon_average_start = number_format($abandon_average_start,0);
 
 if($abandoned > 0) {
-	$abandon_average_end = floor($abandon_end_pos / $abandoned);
+    $abandon_average_end = floor($abandon_end_pos / $abandoned);
 } else {
-	$abandon_average_end = 0;
+    $abandon_average_end = 0;
 }
 $abandon_average_end = number_format($abandon_average_end,0);
 
 $total_abandon = $abandoned + $timeout;
 
 } else {
- 	// No rows returned
-	$abandoned = 0;
-	$timeout = 0;
-	$abandon_average_hold  = 0;
-	$abandon_average_start = 0;
-	$abandon_average_end   = 0;
-	$total_abandon         = 0;
+     // No rows returned
+    $abandoned = 0;
+    $timeout = 0;
+    $abandon_average_hold  = 0;
+    $abandon_average_start = 0;
+    $abandon_average_end   = 0;
+    $total_abandon         = 0;
 }
 
 
@@ -125,196 +114,195 @@ $end_parts   = split(" ", $end);
 <body>
 <?php include("menu.php"); ?>
 <div id="main">
-	<div id="contents">
-		<TABLE width='99%' cellpadding=3 cellspacing=3 border=0>
-		<THEAD>
-		<TR>
-			<TD valign=top width='50%'>
-				<TABLE width='100%' border=0 cellpadding=0 cellspacing=0>
-				<CAPTION><?php echo $lang["$language"]['report_info']?></CAPTION>
-				<TBODY>
-				<TR>
-					<TD><?php echo $lang["$language"]['queue']?>:</TD>
-					<TD><?php echo $queue?></TD>
-				</TR>
-    	        </TR>
-        	       	<TD><?php echo $lang["$language"]['start']?>:</TD>
-            	   	<TD><?php echo $start_parts[0]?></TD>
-				</TR>
-    	        </TR>
-        	    <TR>
-            	   	<TD><?php echo $lang["$language"]['end']?>:</TD>
-               		<TD><?php echo $end_parts[0]?></TD>
-	            </TR>
-    	        <TR>
-        	       	<TD><?php echo $lang["$language"]['period']?>:</TD>
-            	   	<TD><?php echo $period?> <?php echo $lang["$language"]['days']?></TD>
-	            </TR>
-				</TBODY>
-				</TABLE>
+    <div id="contents">
+        <table style="width: 99%; border-collapse: separate; border-spacing: 1px;">
+        <thead>
+        <tr>
+            <td style="width: 50%; vertical-align: top;">
+                <table style='width: 100%; border: 0; border-collapse: collapse; border-spacing: 0;'>
+                <caption><?php echo $lang["$language"]['report_info']?></caption>
+                <tbody>
+                <tr>
+                    <td><?php echo $lang["$language"]['queue']?>:</td>
+                    <td><?php echo $queue?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $lang["$language"]['start']?>:</td>
+                    <td><?php echo $start_parts[0]?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $lang["$language"]['end']?>:</td>
+                    <td><?php echo $end_parts[0]?></td>
+                </tr>
+                <tr>
+                    <td><?php echo $lang["$language"]['period']?>:</td>
+                    <td><?php echo $period?> <?php echo $lang["$language"]['days']?></td>
+                </tr>
+                </tbody>
+                </table>
 
-			</TD>
-			<TD valign=top width='50%'>
+            </td>
+            <td style="width: 50%; vertical-align: top;">
+                <table style='width: 100%; border: 0; border-collapse: collapse; border-spacing: 0;'>
+                <caption><?php echo $lang["$language"]['unanswered_calls']?></caption>
+                <tbody>
+                <tr> 
+                  <td><?php echo $lang["$language"]['number_unanswered']?>:</td>
+                  <td><?php echo $total_abandon?> <?php echo $lang["$language"]['calls']?></td>
+                </tr>
+                <tr>
+                  <td><?php echo $lang["$language"]['avg_wait_before_dis']?>:</td>
+                  <td><?php echo $abandon_average_hold?> <?php echo $lang["$language"]['secs']?></td>
+                </tr>
+                <tr>
+                  <td><?php echo $lang["$language"]['avg_queue_pos_at_dis']?>:</td>
+                  <td><?php echo $abandon_average_end?></td>
+                </tr>
+                <tr>
+                  <td><?php echo $lang["$language"]['avg_queue_start']?>:</td>
+                  <td><?php echo $abandon_average_start?></td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+        </tr>
+        </thead>
+        </table>
+        <br/>    
 
-				<TABLE width='100%' border=0 cellpadding=0 cellspacing=0>
-				<CAPTION><?php echo $lang["$language"]['unanswered_calls']?></CAPTION>
-				<TBODY>
-		        <TR> 
-                  <TD><?php echo $lang["$language"]['number_unanswered']?>:</TD>
-		          <TD><?php echo $total_abandon?> <?php echo $lang["$language"]['calls']?></TD>
-	            </TR>
-                <TR>
-                  <TD><?php echo $lang["$language"]['avg_wait_before_dis']?>:</TD>
-                  <TD><?php echo $abandon_average_hold?> <?php echo $lang["$language"]['secs']?></TD>
-                </TR>
-		        <TR>
-                  <TD><?php echo $lang["$language"]['avg_queue_pos_at_dis']?>:</TD>
-		          <TD><?php echo $abandon_average_end?></TD>
-	            </TR>
-                <TR>
-                  <TD><?php echo $lang["$language"]['avg_queue_start']?>:</TD>
-                  <TD><?php echo $abandon_average_start?></TD>
-                </TR>
-				</TBODY>
-	          </TABLE>
-
-			</TD>
-		</TR>
-		</THEAD>
-		</TABLE>
-		<BR>	
-
-		<a name='1'></a>
-		<TABLE width='99%' cellpadding=3 cellspacing=3 border=0>
-		<CAPTION>
-		<a href='#0'><img src='images/go-up.png' border=0 width=16 height=16 class='icon' 
-		<?php 
-		tooltip($lang["$language"]['gotop'],200);
-		?>
-		></a>&nbsp;&nbsp;
-		<?php echo $lang["$language"]['disconnect_cause']?>
-		</CAPTION>
-			<THEAD>
-			<TR>
-			<TD valign=top width='50%' bgcolor='#fffdf3'>
-				<TABLE width='99%' cellpadding=1 cellspacing=1 border=0>
-				<THEAD>
-				<TR>
-					<TH><?php echo $lang["$language"]['cause']?></TH>
-					<TH><?php echo $lang["$language"]['count']?></TH>
-					<TH><?php echo $lang["$language"]['percent']?></TH>
-				</TR>
-				</THEAD>
-				<TBODY>
-                <TR> 
-                  <TD><?php echo $lang["$language"]['user_abandon']?></TD>
-			      <TD><?php echo $abandoned?> <?php echo $lang["$language"]['calls']?></TD>
-			      <TD>
-					  <?php
-						if($total_abandon > 0 ) {
-							$percent=$abandoned*100/$total_abandon;
-						} else {
-							$percent=0;
-						}
-						$percent=number_format($percent,2);
-						echo $percent;
+        <a id='1'></a>
+        <table style="width: 99%; border-collapse: separate; border-spacing: 1px;" id='table1' >
+        <caption>
+        <a href='#0'><img alt='go up' src='images/go-up.png' width=16 height=16 class='icon' 
+        <?php 
+        tooltip($lang["$language"]['gotop'],200);
+        ?>
+        ></a>&nbsp;&nbsp;
+        <?php echo $lang["$language"]['disconnect_cause']?>
+        </caption>
+            <thead>
+            <tr>
+              <td style="width: 50%; vertical-align: top; background-color: #fffdf3;">
+                <table style="width: 99%; border-collapse: separate; border-spacing: 1px;">
+                <thead>
+                <tr>
+                    <th><?php echo $lang["$language"]['cause']?></th>
+                    <th><?php echo $lang["$language"]['count']?></th>
+                    <th><?php echo $lang["$language"]['percent']?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr> 
+                  <td><?php echo $lang["$language"]['user_abandon']?></td>
+                  <td><?php echo $abandoned?> <?php echo $lang["$language"]['calls']?></td>
+                  <td>
+                      <?php
+                        if($total_abandon > 0 ) {
+                            $percent=$abandoned*100/$total_abandon;
+                        } else {
+                            $percent=0;
+                        }
+                        $percent=number_format($percent,2);
+                        echo $percent;
                       ?> 
-                   <?php echo $lang["$language"]['percent']?></TD>
-		        </TR>
-			    <TR> 
-                  <TD><?php echo $lang["$language"]['timeout']?></TD>
-			      <TD><?php echo $timeout?> <?php echo $lang["$language"]['calls']?></TD>
-			      <TD>
-					  <?php
-						if($total_abandon > 0 ) {
-							$percent=$timeout*100/$total_abandon;
-						} else {
-							$percent=0;
-						}
-						$percent=number_format($percent,2);
-						echo $percent;
+                   <?php echo $lang["$language"]['percent']?></td>
+                </tr>
+                <tr> 
+                  <td><?php echo $lang["$language"]['timeout']?></td>
+                  <td><?php echo $timeout?> <?php echo $lang["$language"]['calls']?></td>
+                  <td>
+                      <?php
+                        if($total_abandon > 0 ) {
+                            $percent=$timeout*100/$total_abandon;
+                        } else {
+                            $percent=0;
+                        }
+                        $percent=number_format($percent,2);
+                        echo $percent;
                       ?> 
-					<?php echo $lang["$language"]['percent']?></TD>
-		        </TR>
-				</TBODY>
-			  </TABLE>
-			</TD>
-			<TD align=center bgcolor='#fffdf3'>
-				<?php
-				$query2 = "var1=".$lang["$language"]['abandon']."&val1=".$abandoned."&";
-				$query2 .= "var2=".$lang["$language"]['timeout']."&val2=".$timeout;
-				$query2.="&title=".$lang["$language"]['disconnect_cause']."$graphcolor2";
-				swf_bar($query2,350,211,"chart1",0);
-				?>
-			</TD>
-			</TR>
-			</THEAD>
-			</TABLE>
+                    <?php echo $lang["$language"]['percent']?></td>
+                </tr>
+                </tbody>
+              </table>
+            </td>
+            <td style="text-align: center; background-color: #fffdf3;">
+                <?php
+                $query2 = "var1=".$lang["$language"]['abandon']."&val1=".$abandoned."&";
+                $query2 .= "var2=".$lang["$language"]['timeout']."&val2=".$timeout;
+                $query2.="&title=".$lang["$language"]['disconnect_cause'];
+                swf_bar($query2,350,211,"chart1",0);
+                ?>
+            </td>
+            </tr>
+            </thead>
+            </table>
 
 
-		<?php
-		if(count($abandon_calls_queue)<=0) {
-			$abandon_calls_queue[""]=0;
-		}
-		?>
-			<a name='2'></a>
-			<TABLE width='99%' cellpadding=3 cellspacing=3 border=0>
-			<CAPTION>
-			<a href='#0'><img src='images/go-up.png' border=0 width=16 height=16 class='icon' 
-			<?php 
-			tooltip($lang["$language"]['gotop'],200);
-			?>
-			></a>&nbsp;&nbsp;
-			<?php echo $lang["$language"]['unanswered_calls_qu']?>
-			</CAPTION>
-			<THEAD>
-			<TR>
-			<TD valign=top width='50%' bgcolor='#fffdf3'>
-				<TABLE width='99%' cellpadding=1 cellspacing=1 border=0>
-				<THEAD>
-                <TR> 
-				   	<TH><?php echo $lang["$language"]['queue']?></TH>
-					<TH><?php echo $lang["$language"]['count']?></TH>
-					<TH><?php echo $lang["$language"]['percent']?></TH>
-                </TR>
-				</THEAD>
-				<TBODY>
-				<?php
-				$countrow=0;
-				$query2="";
-				asort($abandon_calls_queue);
-				foreach($abandon_calls_queue as $key=>$val) {
-					$cual = $countrow%2;
-					if($cual>0) { $odd = " class='odd' "; } else { $odd = ""; }
-					if($total_abandon > 0 ) {
-						$percent = $val * 100 / $total_abandon;
-					} else {
-						$percent = 0;
-					}
-					$percent =number_format($percent,2);
-					echo "<TR $odd><TD>$key</TD><TD>$val calls</TD><TD>$percent ".$lang["$language"]['percent']."</TD></TR>\n";
-					$countrow++;
-					$query2.="var$countrow=$key&val$countrow=$val&";
-				}
-				$query2.="title=".$lang["$language"]['unanswered_calls_qu']."$graphcolor";
-				?>
-			  </TBODY>
-			  </TABLE>
-			</TD>
-			<TD valign=top width="50%" align=center bgcolor='#fffdf3'>
-				<?php 
-				//if ($countrow>1) {
-			    	swf_bar($query2,350,211,"chart2",0);
-			   	//} 
-               	?>
-			</TD>
-			</TR>
-			</THEAD>
-			</TABLE>
-			<BR>
-			<BR>
+        <?php
+        if(count($abandon_calls_queue)<=0) {
+            $abandon_calls_queue[""]=0;
+        }
+        ?>
+            <a id='2'></a>
+            <table style="width: 99%; border-collapse: separate; border-spacing: 1px;" id='table2' >
+            <caption>
+            <a href='#0'><img alt='go up' src='images/go-up.png' width=16 height=16 class='icon' 
+            <?php 
+            tooltip($lang["$language"]['gotop'],200);
+            ?>
+            ></a>&nbsp;&nbsp;
+            <?php echo $lang["$language"]['unanswered_calls_qu']?>
+            </caption>
+            <thead>
+            <tr>
+                <td style="width: 50%; vertical-align: top; background-color: #fffdf3;">
+                <table style="width: 99%; border-collapse: separate; border-spacing: 1px;">
+                <thead>
+                <tr> 
+                    <th><?php echo $lang["$language"]['queue']?></th>
+                    <th><?php echo $lang["$language"]['count']?></th>
+                    <th><?php echo $lang["$language"]['percent']?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $countrow=0;
+                $query2="";
+                asort($abandon_calls_queue);
+                foreach($abandon_calls_queue as $key=>$val) {
+                    $cual = $countrow%2;
+                    if($cual>0) { $odd = " class='odd' "; } else { $odd = ""; }
+                    if($total_abandon > 0 ) {
+                        $percent = $val * 100 / $total_abandon;
+                    } else {
+                        $percent = 0;
+                    }
+                    $percent =number_format($percent,2);
+                    echo "<tr $odd><td>$key</td><td>$val calls</td><td>$percent ".$lang["$language"]['percent']."</td></tr>\n";
+                    $countrow++;
+                    $query2.="var$countrow=$key&val$countrow=$val&";
+                }
+                $query2.="title=".$lang["$language"]['unanswered_calls_qu'];
+                ?>
+              </tbody>
+              </table>
+            </td>
+            <td style="width: 50%; vertical-align: top; background-color: #fffdf3;">
+                <?php 
+                //if ($countrow>1) {
+                    swf_bar($query2,350,211,"chart2",0);
+                   //} 
+                   ?>
+            </td>
+            </tr>
+            </thead>
+            </table>
+            <br/>
+            <br/>
 </div>
 </div>
-<script type="text/javascript" src="js/wz_tooltip.js"></script>
+</div>
+<div id='footer'>&copy; Copyright 2007 - <?php echo date('Y');?> by Nicol&aacute;s Gudi&ntilde;o - <a href='http://www.asternic.net'>Asternic Asterisk Tools</a> Licensed under <a href='http://www.opensource.org/licenses/gpl-3.0.html'>GPL3</a></div>
+<script src="js/wz_tooltip.js"></script>
 </body>
 </html>

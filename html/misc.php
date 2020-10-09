@@ -30,8 +30,7 @@ function swf_bar($values,$width,$height,$divid,$stack) {
 
 ?>
 
-<canvas id="<?php echo $divid?>" width='<?php echo $width;?>px' height='<?php echo $height;?>px'>
-</canvas>
+<canvas id="<?php echo $divid?>" width='<?php echo $width;?>' height='<?php echo $height;?>'></canvas>
 
 
 <script>
@@ -138,10 +137,10 @@ function print_exports($header_pdf,$data_pdf,$width_pdf,$title_pdf,$cover_pdf) {
 		echo "<input type='hidden' name='width' value='".$width_serial."' />\n";
 		echo "<input type='hidden' name='title' value='".$title_serial."' />\n";
 		echo "<input type='hidden' name='cover' value='".$cover_serial."' />\n";
-		echo "<input type=image name='pdf' src='images/pdf.gif' ";
+		echo "<input type=image name='pdf' alt='export to pdf' src='images/pdf.gif' ";
 		tooltip($lang["$language"]['pdfhelp'],200);
 		echo ">\n";
-		echo "<input type=image name='csv' src='images/excel.gif' "; 
+		echo "<input type=image name='csv' alt='export to csv' src='images/excel.gif' "; 
 		tooltip($lang["$language"]['csvhelp'],200);
 		echo ">\n";
 		echo "</form>";

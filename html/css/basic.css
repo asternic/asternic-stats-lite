@@ -96,3 +96,6 @@ html, body {
        height: 4em;
 }
 
+img { border: 0; }
+
+td { padding: 2px; }

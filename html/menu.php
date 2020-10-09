@@ -21,7 +21,7 @@
 ?>
 <div id="sidebar">&nbsp;</div>
 <div id="content">
-<a name='0'></a>
+<a id='0'></a>
 <div id='header'>
 <ul id='primary'>
 <?php
@@ -39,45 +39,40 @@ $link[] = "realtime.php";
 
 $anchor = Array();
 
-if(basename($self)=="answered.php")
-{
-
-$anchor[]=$lang["$language"]['answered_calls_by_agent'];
-$anchor[]=$lang["$language"]['call_response'];
-$anchor[]=$lang["$language"]['answered_calls_by_queue'];
-$anchor[]=$lang["$language"]['disconnect_cause'];
-$b=1;
+if(basename($self)=="answered.php") {
+    $anchor[]=$lang["$language"]['answered_calls_by_agent'];
+    $anchor[]=$lang["$language"]['call_response'];
+    $anchor[]=$lang["$language"]['answered_calls_by_queue'];
+    $anchor[]=$lang["$language"]['disconnect_cause'];
+    $b=1;
 } elseif (basename($self) =="unanswered.php") {
-
-$anchor[]=$lang["$language"]['disconnect_cause'];
-$anchor[]=$lang["$language"]['unanswered_calls_qu'];
-$b=2;
+    $anchor[]=$lang["$language"]['disconnect_cause'];
+    $anchor[]=$lang["$language"]['unanswered_calls_qu'];
+    $b=2;
 } elseif (basename($self) =="distribution.php") {
-$b=3;
-$anchor[]=$lang["$language"]['call_distrib_day'];
-$anchor[]=$lang["$language"]['call_distrib_hour'];
-$anchor[]=$lang["$language"]['call_distrib_week'];
+    $b=3;
+    $anchor[]=$lang["$language"]['call_distrib_day'];
+    $anchor[]=$lang["$language"]['call_distrib_hour'];
+    $anchor[]=$lang["$language"]['call_distrib_week'];
 }
 
-
-for($a=0;$a<count($menu);$a++)
-{
+for($a=0;$a<count($menu);$a++) {
     if(basename($self)==$link[$a]) {
-		echo "<li><span>".$menu[$a]."</span></li>\n";
-		if(count($anchor)>0 && $a=$b) {
-		    echo "<ul id='secondary'>\n";
-			$contador=1;
-			foreach ($anchor as $item) {
-				echo "<li><a href='#$contador'>$item</a></li>\n";
-				$contador++;
-			}
-		    echo "</ul>\n";
-		}
-	
-	} else {
-		if(isset($_SESSION['QSTATS']['start'])) {
-		echo "<li><a href='".$link["$a"]."'>".$menu["$a"]."</a></li>\n";
-	}
+        echo "<li><span>".$menu[$a]."</span></li>\n";
+        if(count($anchor)>0 && $a=$b) {
+            echo "<li><ul id='secondary'>\n";
+            $contador=1;
+            foreach ($anchor as $item) {
+                echo "<li><a href='#$contador'>$item</a></li>\n";
+                $contador++;
+            }
+            echo "</ul></li>\n";
+        }
+
+    } else {
+        if(isset($_SESSION['QSTATS']['start'])) {
+            echo "<li><a href='".$link["$a"]."'>".$menu["$a"]."</a></li>\n";
+        }
     }
 }
 ?>
