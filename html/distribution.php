@@ -32,7 +32,6 @@ include("sesvars.php");
 	<style type="text/css" media="screen">@import "css/tab.css";</style>
 	<style type="text/css" media="screen">@import "css/table.css";</style>
 	<style type="text/css" media="screen">@import "css/fixed-all.css";</style>
-	<script type="text/javascript" src="js/flashobject.js"></script>
 	<script type="text/javascript" src="js/sorttable.js"></script>
 	<script type="text/javascript" src="js/Chart.min.js"></script>
 
