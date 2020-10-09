@@ -28,29 +28,86 @@ function return_timestamp($date_string)
 
 function swf_bar($values,$width,$height,$divid,$stack) {
 
-	if($stack==1) {
-		$chart = "barstack.swf";
-	} else {
-		$chart = "bar.swf";
-	}
 ?>
-<div id="<?php echo $divid?>">
-<?php echo $values?>
-</div>
 
-<script type="text/javascript">
-   var fo = new FlashObject("<?php echo $chart?>", "barchart", "<?php echo $width?>", "<?php echo $height?>", "7", "#336699");
-   fo.addParam("wmode", "transparent");
-//   fo.addParam("salign", "t");
-	<?php
-		$variables = split("&",$values);
-		foreach ($variables as $deauna) {
-			echo "//$deauna\n";
-			$pedazos = split("=",$deauna);
-			echo "fo.addVariable('".$pedazos[0]."','".$pedazos[1]."');\n";
-		}
-	?>
-   fo.write("<?php echo $divid?>");
+<canvas id="<?php echo $divid?>" width='<?php echo $width;?>px' height='<?php echo $height;?>px'>
+</canvas>
+
+
+<script>
+
+<?php
+parse_str($values,$options);
+
+$colores = array('#FF6600','#538353');
+$labels  = array();
+$dvalues = array();
+
+foreach($options as $key=>$val) {
+    if(substr($key,0,3)=="var") {
+        $labels[]=$val;
+    } else if(substr($key,0,3)=="tag") {
+        $series = substr($key,3,1);
+        $seriename[$series]=$val;
+    } else if(substr($key,0,3)=="val") {
+        if($stack==0) {
+            $dvalues['A'][]=$val;
+        } else {
+            $series = substr($key,3,1);
+            $dvalues[$series][]=$val;
+        }
+    }
+}
+
+if(!isset($seriename['A'])) {
+    if(preg_match("/secs/",$options['title'])) {
+        $seriename['A']="Seconds";
+    } else {
+        $seriename['A']="Count";
+    }
+}
+
+$labelstext = "'".implode("','",$labels)."'";
+
+?>
+
+var barChartData_<?php echo $divid;?> = {
+    labels: [<?php echo $labelstext;?>],
+    datasets: [
+
+<?php
+foreach($dvalues as $serie=>$points) {
+    $valuestext = implode(",",$points);
+    $color = array_shift($colores);
+?>
+{
+backgroundColor: '<?php echo $color;?>',
+label: '<?php echo $seriename[$serie];?>',
+data: [
+<?php echo $valuestext;?>
+]
+},
+<?php } ?>
+
+    ]
+};
+
+var ctx = document.getElementById('<?php echo $divid;?>').getContext('2d');
+var myChart = new Chart(ctx, {
+type: 'bar',
+	data: barChartData_<?php echo $divid;?>,
+	options: {
+		title: {
+			display: true,
+			text: '<?php echo $options['title'];?>'
+		},
+		tooltips: {
+			mode: 'index',
+			intersect: false
+		},
+		responsive: true
+	}
+});
 </script>
 
 <?php

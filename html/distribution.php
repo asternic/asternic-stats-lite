@@ -34,6 +34,7 @@ include("sesvars.php");
 	<style type="text/css" media="screen">@import "css/fixed-all.css";</style>
 	<script type="text/javascript" src="js/flashobject.js"></script>
 	<script type="text/javascript" src="js/sorttable.js"></script>
+	<script type="text/javascript" src="js/Chart.min.js"></script>
 
 <!--[if gte IE 5.5000]>
 <style type='text/css'> img { behavior:url(pngbehavior.htc) } </style>
