@@ -1,6 +1,6 @@
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -64,14 +64,14 @@ $end_month_ts -= 86400;
 $end_month = date('Y-m-d',$end_month_ts);
 
 $query = "SELECT queue FROM qname ORDER BY queue";
-$res = consulta_db($query,0,0);
-while ($row = db_fetch_row($res)) {
+$res = $midb->consulta($query);
+while ($row = $midb->fetch_row($res)) {
   $colas[] = $row[0];
 }
 
 $query = "SELECT agent FROM qagent ORDER BY agent";
-$res = consulta_db($query,0,0);
-while ($row = db_fetch_row($res)) {
+$res = $midb->consulta($query);
+while ($row = $midb->fetch_row($res)) {
   $agentes[] = $row[0];
 }
 

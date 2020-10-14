@@ -59,7 +59,7 @@ CREATE TABLE qname (
 CREATE TABLE queue_stats (
   queue_stats_id int(12) NOT NULL auto_increment,
   uniqueid varchar(40) default NULL,
-  datetime datetime NOT NULL default '0000-00-00 00:00:00',
+  datetime datetime NOT NULL,
   qname int(6) default NULL,
   qagent int(6) default NULL,
   qevent int(2) default NULL,

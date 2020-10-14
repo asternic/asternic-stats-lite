@@ -1,6 +1,6 @@
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -66,13 +66,13 @@ $login_by_day   = Array();
 $login_by_hour  = Array();
 $login_by_dw    = Array();
 
-$res = consulta_db($query,$DB_DEBUG,$DB_MUERE);
+$res = $midb->consulta($query);
 
-if(db_num_rows($res)>0) {
+if($midb->num_rows($res)>0) {
 
-    while($row=db_fetch_row($res)) {
-        $partes_fecha = split(" ",$row[0]);
-        $partes_hora  = split(":",$partes_fecha[1]);
+    while($row=$midb->fetch_row($res)) {
+        $partes_fecha = preg_split("/ /",$row[0]);
+        $partes_hora  = preg_split("/:/",$partes_fecha[1]);
 
         $timestamp = return_timestamp($row[0]);
         $day_of_week = date('w',$timestamp);
@@ -126,8 +126,8 @@ if(db_num_rows($res)>0) {
 }
 
 
-$start_parts = split(" ", $start);
-$end_parts   = split(" ", $end);
+$start_parts = preg_split("/ /", $start);
+$end_parts   = preg_split("/ /", $end);
 
 $cover_pdf = $lang["$language"]['queue'].": ".$queue."\n";
 $cover_pdf.= $lang["$language"]['start'].": ".$start_parts[0]."\n";

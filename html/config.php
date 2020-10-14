@@ -20,7 +20,8 @@ $language = "en";
 
 require_once("lang/$language.php");
 
-$midb = conecta_db($dbhost,$dbname,$dbuser,$dbpass);
+$midb = new dbcon($dbhost, $dbuser, $dbpass, $dbname, true);
+
 $self = $_SERVER['PHP_SELF'];
 
 $DB_DEBUG = false; 

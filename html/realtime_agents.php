@@ -1,6 +1,6 @@
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -87,7 +87,7 @@ foreach($queue as $qn) {
                     if($aval=="busy") $aval="not in use";
                 }
 
-                $aval2 = ereg_replace(" ","_",$aval);
+                $aval2 = preg_replace("/ /","_",$aval);
                 $mystringaval = $lang[$language][$aval2];
 				if($mystringaval=="") $mystringaval = $aval;
                 echo "<td><div style='float: left; background: ".$color[$aval]."; width: 1em;'>&nbsp;</div>&nbsp; $mystringaval";

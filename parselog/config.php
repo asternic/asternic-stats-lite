@@ -10,7 +10,7 @@ $dbname = 'qstatslite';
 $dbuser = 'root';
 $dbpass = '';
 
-$midb = conecta_db($dbhost,$dbname,$dbuser,$dbpass);
+$midb = new dbcon($dbhost, $dbuser, $dbpass, $dbname, true);
 $self = $_SERVER['PHP_SELF'];
 
 $DB_DEBUG = false;

@@ -1,6 +1,6 @@
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -83,7 +83,7 @@ function get_channels($am) {
 
     $res=$am->Command("core show channels concise");
     $res=$res['data'];
-    $responselines=split("\n",$res);
+    $responselines=preg_split("/\n/",$res);
     $lines=array();
 
     foreach($responselines as $l) {
@@ -96,9 +96,9 @@ function get_channels($am) {
 
     $channels=array();
     foreach($lines as $l) {
-        $chan=split("!",$l);
+        $chan=preg_split("/!/",$l);
         if (count($chan)==1)
-            $chan=split(":",$l);
+            $chan=preg_split("/:/",$l);
         $ci=array();
         $ci['channel']=$chan[0];
         $ci['context']=$chan[1];
@@ -127,7 +127,7 @@ function get_channels($am) {
 function get_queues($am,$channels) {
     $res=$am->Command("queue show");
     $res=$res['data']; 
-    $lines=split("\n",$res);
+    $lines=preg_split("/\n/",$res);
 
     $queue=null;
     $data=null;
@@ -184,12 +184,12 @@ function get_queues($am,$channels) {
                 $status="paused";
             }
             if(preg_match("/last was/",$l)) {
-                $partes = split("last was",$l,2);
+                $partes = preg_split("/last was/",$l,2);
                 $seconds = $partes[1];
                 preg_match("/(\d+)/",$seconds,$matches);
                 $seconds = seconds2minutes($matches[1]);
             }
-            $agentenumber = ereg_replace("Agent/","",$member);
+            $agentenumber = preg_replace("/Agent\//","",$member);
             $mem['id']=$member;
             $mem['agent']=$agentenumber;
             $mem['name']=$name;
@@ -226,11 +226,11 @@ function convertlocal($agent) {
 }
 
 function agent_name($channel) {
-    list ($nada,$number) = split("/",$channel,2);
+    list ($nada,$number) = preg_split("/\//",$channel,2);
 	if(is_file("agents.txt")) {
         $lineas = file("agents.txt");
         foreach ($lineas as $linea_num => $linea) {
-            list ($num,$nombre) = split(",",$linea,2);
+            list ($num,$nombre) = preg_split("/,/",$linea,2);
             if($num==$number) {
                 return "$num - $nombre";
             }

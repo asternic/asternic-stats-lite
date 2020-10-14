@@ -1,7 +1,7 @@
 #!/usr/bin/php -q
 <?php
 /*
-   Copyright 2007, 2008 Nicolás Gudiño
+   Copyright 2007, 2020 Nicolás Gudiño
 
    This file is part of Asternic Call Center Stats.
 
@@ -24,52 +24,60 @@ require_once("config.php");
 
 error_reporting(0);
 
-if($argv[1]=="purge") {
-  echo "Purging tables...\n";
-  $query = "DELETE FROM qname";
-  $res = consulta_db($query,0,0);
-  $query = "DELETE FROM qagent";
-  $res = consulta_db($query,0,0);
-  $query = "DELETE FROM queue_stats";
-  $res = consulta_db($query,0,0);
-  echo "Done...\n";
-exit;
-}
+if(isset($argv[1])) {
+    if($argv[1]=="purge") {
+        echo "Purging tables...\n";
+        $query = "DELETE FROM qname";
+        $res = $midb->consulta($query);
+        $query = "DELETE FROM qagent";
+        $res = $midb->consulta($query);
+        $query = "DELETE FROM queue_stats";
+        $res = $midb->consulta($query);
+        echo "Done...\n";
+        exit;
+    }
 
+    if($argv[1]=="convertlocal") {
+        $convertlocal=1;
+    } else {
+        $convertlocal=0;
+    }
+} else {
+    $convertlocal=0;
+}
 
 // Select the most recent event saved
 $query = "SELECT datetime FROM queue_stats ORDER BY datetime DESC LIMIT 1";
-$res = consulta_db($query,0,0);
-
-if(db_num_rows($res)>0) {
-	$row = db_fetch_row($res);
-	$last_event_ts = return_timestamp($row[0]);
-	$last_event_ts -= 10;
+$res = $midb->consulta($query);
+if($midb->num_rows($res)>0) {
+    $row = $midb->fetch_row($res);
+    $last_event_ts = return_timestamp($row[0]);
+    $last_event_ts -= 10;
 } else {
-	$last_event_ts = 0;
+    $last_event_ts = 0;
 }
 
 //$last_event_ts = 0;
 
 // Populates an array with the EVENTS ids
 $query = "SELECT * FROM qevent ORDER BY event_id";
-$res = consulta_db($query,0,0);
-while($row = db_fetch_row($res)) {
-	$event_array["$row[1]"] = $row[0];
+$res = $midb->consulta($query);
+while($row = $midb->fetch_row($res)) {
+    $event_array["$row[1]"] = $row[0];
 }
 
 $filename = "$queue_log_dir/$queue_log_file";
 $dataFile = fopen( $filename, "r" );
 
 if ( $dataFile ) {
-	while (!feof($dataFile)) {
-		$buffer = fgets($dataFile, 4096);
-		procesa($buffer);
-	}
-	fclose($dataFile);
+    while (!feof($dataFile)) {
+        $buffer = fgets($dataFile, 4096);
+        procesa($buffer);
+    }
+    fclose($dataFile);
 } 
 else {
-	die( "fopen failed for $filename" ) ;
+    die( "fopen failed for $filename" ) ;
 }
 
 ?>
