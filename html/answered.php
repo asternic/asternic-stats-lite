@@ -64,7 +64,7 @@ $query.= "ac.event AS qevent, qs.info1 AS info1, qs.info2 AS info2,  qs.info3 AS
 $query.= "FROM queue_stats AS qs, qname AS q, qagent AS ag, qevent AS ac WHERE ";
 $query.= "qs.qname = q.qname_id AND qs.qagent = ag.agent_id AND qs.qevent = ac.event_id AND ";
 $query.= "qs.datetime >= '%s' AND qs.datetime <= '%s' AND ";
-$query.= "q.queue IN ($queue) AND ag.agent in ($agent) AND ac.event IN ('COMPLETECALLER', 'COMPLETEAGENT','trANSFER','CONNECT') ORDER BY qs.datetime";
+$query.= "q.queue IN ($queue) AND ag.agent in ($agent) AND ac.event IN ('COMPLETECALLER', 'COMPLETEAGENT','TRANSFER','CONNECT') ORDER BY qs.datetime";
 
 $answer["15"]=0;
 $answer["30"]=0;
@@ -86,12 +86,12 @@ $total_calls_queue = Array();
 $res = $midb->consulta($query,array($start,$end));
 if($res) {
     while($row=$midb->fetch_row($res)) {
-        if($row[3] <> "trANSFER" && $row[3]<>"CONNECT") {
+        if($row[3] <> "TRANSFER" && $row[3]<>"CONNECT") {
             $total_hold     += $row[4];
             $total_duration += $row[5];
             $total_calls++;
             $total_calls_queue["$row[1]"]++;
-        } elseif($row[3]=="trANSFER") {
+        } elseif($row[3]=="TRANSFER") {
             $transferidas++;
         }
         if($row[3]=="CONNECT") {
@@ -140,7 +140,7 @@ if($total_calls > 0) {
 }
 
 $total_duration_print = seconds2minutes($total_duration);
-// trANSFERS
+// TRANSFERS
 $query = "SELECT ag.agent AS agent, qs.info1 AS info1,  qs.info2 AS info2 ";
 $query.= "FROM  queue_stats AS qs, qevent AS ac, qagent as ag, qname As q WHERE qs.qevent = ac.event_id ";
 $query.= "AND qs.qname = q.qname_id AND ag.agent_id = qs.qagent AND qs.datetime >= '%s' ";
