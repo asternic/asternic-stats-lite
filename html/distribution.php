@@ -51,7 +51,7 @@ $graphcolorstack = "&bgcolor=0xF0ffff&bgcolorchart=0xdfedf3&fade1=ff6600&colorba
 $query = "SELECT qs.datetime AS datetime, q.queue AS qname, ag.agent AS qagent, ac.event AS qevent, ";
 $query.= "qs.info1 AS info1, qs.info2 AS info2,  qs.info3 AS info3 FROM queue_stats AS qs, qname AS q, ";
 $query.= "qagent AS ag, qevent AS ac WHERE qs.qname = q.qname_id AND qs.qagent = ag.agent_id AND ";
-$query.= "qs.qevent = ac.event_id AND qs.datetime >= '$start' AND qs.datetime <= '$end' ";
+$query.= "qs.qevent = ac.event_id AND qs.datetime >= '%s' AND qs.datetime <= '%s' ";
 $query.= "AND q.queue IN ($queue,'NONE') AND ac.event IN ('ABANDON', 'EXITWITHTIMEOUT','COMPLETECALLER','COMPLETEAGENT','AGENTLOGIN','AGENTLOGOFF','AGENTCALLBACKLOGIN','AGENTCALLBACKLOGOFF') ";
 $query.= "ORDER BY qs.datetime";
 
@@ -66,7 +66,7 @@ $login_by_day   = Array();
 $login_by_hour  = Array();
 $login_by_dw    = Array();
 
-$res = $midb->consulta($query);
+$res = $midb->consulta($query,array($start,$end));
 
 if($midb->num_rows($res)>0) {
 
