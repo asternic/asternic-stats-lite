@@ -5,7 +5,7 @@ require_once("misc.php");
 // Credentials for MYSQL database
 $dbhost = 'localhost';
 $dbname = 'qstatslite';
-$dbuser = 'root';
+$dbuser = 'qstatsliteuser';
 $dbpass = '';
 
 // Credentials for AMI (for the realtime tab to work)

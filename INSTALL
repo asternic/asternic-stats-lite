@@ -7,29 +7,33 @@ INSTALLING
 
 #> cd asternic-stats
 
-3) Edit ./html/config.php to set your db user and pass,
-   the AMI credentials (as set in /etc/asterisk/manager.conf).
-   You can also select the language.
-
-4) Move /html to a suitable place on your web root
-
-#> mv html /var/www/html/qstatslite
-
-5) Create a new database named 'qstatslite' and related tables:
+3) Create a new database named 'qstatslite' and related tables:
 
 #> mysql -u root -p < ./sql/qstats.sql
 
-6) Edit ./parselog/config.php to set the location and 
+4) Create a MySQL user and GRANT permissions
+
+#> mysql -u root -p -e "CREATE USER 'qstatsliteuser'@'localhost' IDENTIFIED by 'somepassword'"
+#> mysql -u root -p -e "GRANT select,insert,update,delete ON qstatslite.* TO qstatsliteuser"
+ 
+5) Edit ./html/config.php to set your db user and pass,
+   the AMI credentials (as set in /etc/asterisk/manager.conf).
+   You can also select the language.
+
+6) Move /html to a suitable place on your web root
+
+#> mv html /var/www/html/qstatslite
+
+7) Edit ./parselog/config.php to set the location and 
    name of the queue_log file and your db user and pass
 
-7) Move the parselog directory to its final location:
+8) Move the parselog directory to its final location:
 
 #> mv parselog /usr/local/parseloglite
 
 
 PARSING LOGS
 ------------
-
 
 Inside /usr/local/parseloglite directory you will find a script to do
 the job named parselog.php. To test it, change to that directory and

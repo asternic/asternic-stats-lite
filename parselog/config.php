@@ -7,7 +7,7 @@ $queue_log_file = 'queue_log';
 
 $dbhost = 'localhost';
 $dbname = 'qstatslite';
-$dbuser = 'root';
+$dbuser = 'qstatsliteuser';
 $dbpass = '';
 
 $midb = new dbcon($dbhost, $dbuser, $dbpass, $dbname, true);
