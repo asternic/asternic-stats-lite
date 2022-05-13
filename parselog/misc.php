@@ -59,13 +59,10 @@ function check_agent($agent) {
         return 0;
     }
 
-    $partes = preg_split("/-/",$agent,2);
-
-    $agent = $partes[0];
-
     if($convertlocal) {
-        $agent = preg_replace("/^Local/","SIP",$agent);
-        $agent = preg_replace("/@from/","",$agent);
+        if(preg_match("/^Local\/([^@]*).*/i",$agent,$matches)) {
+            $agent = "Agent/".$matches[1];
+        }
     }
 
     if(isset($agentcache["$agent"])) {
