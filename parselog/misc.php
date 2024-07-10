@@ -118,7 +118,7 @@ function procesa($linea) {
     if(array_key_exists($event,$event_array)) {
         $event_id = $event_array["$event"];
         if($agent_id <> -1) {
-            $query = "INSERT INTO queue_stats (uniqueid, datetime, qname, qagent, qevent, info1, info2, info3) ";
+            $query = "INSERT IGNORE INTO queue_stats (uniqueid, datetime, qname, qagent, qevent, info1, info2, info3) ";
             $query.= "VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')";
             $res = $midb->consulta($query,array($uniqueid,$date,$queue_id,$agent_id,$event_id,$data1,$data2,$data3));
         }

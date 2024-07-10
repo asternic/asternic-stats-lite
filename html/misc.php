@@ -92,6 +92,7 @@ data: [
 };
 
 var ctx = document.getElementById('<?php echo $divid;?>').getContext('2d');
+$('document').ready(function(){
 var myChart = new Chart(ctx, {
 type: 'bar',
 	data: barChartData_<?php echo $divid;?>,
@@ -106,6 +107,7 @@ type: 'bar',
 		},
 		responsive: true
 	}
+});
 });
 </script>
 
