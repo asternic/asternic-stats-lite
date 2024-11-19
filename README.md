@@ -7,8 +7,8 @@ Asternic Call Center Stats Lite is an open-source queue reporting solution for A
 ## Requirements
 
 - Linux server
-- MySQL database
-- PHP
+- MySQL or MariaDB database
+- PHP 5.4 or higher
 - Web server (Apache recommended)
 - Asterisk PBX with queue support
 
@@ -28,18 +28,17 @@ For enhanced security, consider Asternic Call Center Stats PRO.
 
 ## Installation
 
-### 1. Download the Software
+### 1. Clone the repository
 
 ```bash
 cd /usr/src
-wget http://download.asternic.net/asternic-stats-1.8.tgz
+git clone https://github.com/asternic/asternic-stats-lite.git
 ```
 
-### 2. Extract Files
+### 2. Change to repo directory
 
 ```bash
-tar zvxf asternic-stats-1.8.tgz
-cd asternic-stats
+cd asternic-stats-lite
 ```
 
 ### 3. Database Setup
@@ -127,7 +126,7 @@ Access your call center statistics by navigating to:
 
 ## License
 
-Open-source (specific license details not provided in original documentation)
+GPL-3.0 license
 
 ## Support
 
